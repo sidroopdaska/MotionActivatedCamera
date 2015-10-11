@@ -57,7 +57,7 @@ int main(){
             oVideoWriter  = VideoWriter("/Users/sid/Documents/"+intToString(inc)+".avi", CV_FOURCC('D', 'I', 'V', '3'), 20, frameSize, true);
             recording = true;
             startNewRecording = false;
-            cout<<"New video file created /Users/sid/Documentsn/MyVideo"+intToString(inc)+".avi "<<endl;
+            cout<<"New video file created /Users/sid/Documents/MyVideo"+intToString(inc)+".avi "<<endl;
             
             if (!oVideoWriter.isOpened() )
             {
@@ -70,37 +70,37 @@ int main(){
         capture.read(frame1);
         
         //convert frame1 to gray scale for frame differencing
-        cv::cvtColor(frame1,grayImage1,COLOR_BGR2GRAY);
+        cvtColor(frame1,grayImage1,COLOR_BGR2GRAY);
         capture.read(frame2);
         
         //convert frame2 to gray scale for frame differencing
-        cv::cvtColor(frame2,grayImage2,COLOR_BGR2GRAY);
+        cvtColor(frame2,grayImage2,COLOR_BGR2GRAY);
         
         //perform frame differencing with the sequential images. This will output an "intensity image"
         //do not confuse this with a threshold image, we will need to perform thresholding afterwards.
-        cv::absdiff(grayImage1,grayImage2,differenceImage);
+        absdiff(grayImage1,grayImage2,differenceImage);
         
         //threshold intensity image at a given sensitivity value
-        cv::threshold(differenceImage,thresholdImage,SENSITIVITY_VALUE,255,THRESH_BINARY);
+        threshold(differenceImage,thresholdImage,SENSITIVITY_VALUE,255,THRESH_BINARY);
         
         if(debugMode==true){
-            cv::imshow("Difference Image",differenceImage);
-            cv::imshow("Threshold Image", thresholdImage);
+            imshow("Difference Image",differenceImage);
+            imshow("Threshold Image", thresholdImage);
         } else {
-            cv::destroyWindow("Difference Image");
-            cv::destroyWindow("Threshold Image");
+            destroyWindow("Difference Image");
+            destroyWindow("Threshold Image");
         }
         
         //blur the image to get rid of the noise. This will output an intensity image
-        cv::blur(thresholdImage,thresholdImage,cv::Size(BLUR_SIZE,BLUR_SIZE));
+        blur(thresholdImage,thresholdImage,Size(BLUR_SIZE,BLUR_SIZE));
         
         //threshold again to obtain binary image from blur output
-        cv::threshold(thresholdImage,thresholdImage,SENSITIVITY_VALUE,255,THRESH_BINARY);
+        threshold(thresholdImage,thresholdImage,SENSITIVITY_VALUE,255,THRESH_BINARY);
         if(debugMode==true){
             imshow("Final Threshold Image",thresholdImage);
             
         } else {
-            cv::destroyWindow("Final Threshold Image");
+            destroyWindow("Final Threshold Image");
         }
         
         //if tracking enabled, search for Motion
@@ -121,7 +121,7 @@ int main(){
         }
         
         if(motionDetected){
-            putText(frame1,"MOTION DETECTED",cv::Point(0,420),2,2,cv::Scalar(0,255,0));
+            putText(frame1,"MOTION DETECTED",Point(0,420),2,2,Scalar(0,255,0));
             recording = true;
             
             if(firstRun == true){
